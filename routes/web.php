@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,9 +14,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('clients', ClientController::class);
+
+Route::post('/clients/{id}/validate', [App\Http\Controllers\ClientController::class,'setToValidate'])->name('clients.validate');
+Route::post('/clients/{id}/reject', [App\Http\Controllers\ClientController::class,'reject'])->name('clients.reject');
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
